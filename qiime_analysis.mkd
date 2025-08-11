@@ -1,0 +1,409 @@
+`conda activate qiime2-2023.2`
+
+
+
+
+
+# import data from fastq to qza
+
+## 16S
+### Cruise 1
+    qiime tools import --type 'SampleData[PairedEndSequencesWithQuality]' \
+    --input-path ./../Cruise1Seqs/16S \
+    --input-format CasavaOneEightSingleLanePerSampleDirFmt \
+    --output-path Cruise1Seqs_16S_demux-paired-end.qza
+
+    qiime tools import --type 'SampleData[PairedEndSequencesWithQuality]' \
+    --input-path ./../Cruise1Seqs/6689_droppedsamples \
+    --input-format CasavaOneEightSingleLanePerSampleDirFmt \
+    --output-path Cruise1Seqs_dropped_demux-paired-end.qza
+
+### Cruise 3
+qiime tools import --type 'SampleData[PairedEndSequencesWithQuality]' \
+--input-path ./../Cruise3Seqs/16S \
+--input-format CasavaOneEightSingleLanePerSampleDirFmt \
+--output-path Cruise3Seqs_16S_demux-paired-end.qza
+
+### Cruise 2/4
+qiime tools import --type 'SampleData[PairedEndSequencesWithQuality]' \
+--input-path ./../Cruise2_4_Seqs/16S \
+--input-format CasavaOneEightSingleLanePerSampleDirFmt \
+--output-path Cruise2_4Seqs_16S_demux-paired-end.qza
+
+## 18S
+### Cruise 1
+    qiime tools import --type 'SampleData[PairedEndSequencesWithQuality]' \
+    --input-path ./../Cruise1Seqs/18S \
+    --input-format CasavaOneEightSingleLanePerSampleDirFmt \
+    --output-path Cruise1Seqs_18S_demux-paired-end.qza
+
+### Cruise 3
+qiime tools import --type 'SampleData[PairedEndSequencesWithQuality]' \
+--input-path ./../Cruise3Seqs/18S \
+--input-format CasavaOneEightSingleLanePerSampleDirFmt \
+--output-path Cruise3Seqs_18S_demux-paired-end.qza
+
+### Cruise 2/4
+qiime tools import --type 'SampleData[PairedEndSequencesWithQuality]' \
+--input-path ./../Cruise2_4_Seqs/18S \
+--input-format CasavaOneEightSingleLanePerSampleDirFmt \
+--output-path Cruise2_4Seqs_18S_demux-paired-end.qza
+
+## ITS
+## Cruise 1
+    qiime tools import --type 'SampleData[PairedEndSequencesWithQuality]' \
+    --input-path ./../Cruise1Seqs/ITS \
+    --input-format CasavaOneEightSingleLanePerSampleDirFmt \
+    --output-path Cruise1Seqs_ITS_demux-paired-end.qza
+
+## Cruise 3
+    qiime tools import --type 'SampleData[PairedEndSequencesWithQuality]' \
+    --input-path ./../Cruise3Seqs/ITS \
+    --input-format CasavaOneEightSingleLanePerSampleDirFmt \
+    --output-path Cruise3Seqs_ITS_demux-paired-end.qza
+
+### Cruise 2/4
+    qiime tools import --type 'SampleData[PairedEndSequencesWithQuality]' \
+    --input-path ./../Cruise2_4_Seqs/ITS \
+    --input-format CasavaOneEightSingleLanePerSampleDirFmt \
+    --output-path Cruise2_4Seqs_ITS_demux-paired-end.qza
+
+
+
+# Convert Imported data from qza to qzv
+## check sequence quality
+
+## Cruise 1
+    qiime demux summarize \
+    --i-data Cruise1Seqs_16S_demux-paired-end.qza \
+    --o-visualization Cruise1Seqs_16S_demux-paired-end.qzv
+
+    qiime demux summarize \
+    --i-data Cruise1Seqs_dropped_demux-paired-end.qza \
+    --o-visualization Cruise1Seqs_dropped_demux-paired-end.qzv
+
+    qiime demux summarize \
+    --i-data Cruise1Seqs_18S_demux-paired-end.qza \
+    --o-visualization Cruise1Seqs_18S_demux-paired-end.qzv
+
+    qiime demux summarize \
+    --i-data Cruise1Seqs_ITS_demux-paired-end.qza \
+    --o-visualization Cruise1Seqs_ITS_demux-paired-end.qzv
+
+## Cruise 3
+qiime demux summarize \
+--i-data Cruise3Seqs_16S_demux-paired-end.qza \
+--o-visualization Cruise3Seqs_16S_demux-paired-end.qzv
+
+qiime demux summarize \
+--i-data Cruise3Seqs_18S_demux-paired-end.qza \
+--o-visualization Cruise3Seqs_18S_demux-paired-end.qzv
+
+qiime demux summarize \
+--i-data Cruise3Seqs_ITS_demux-paired-end.qza \
+--o-visualization Cruise3Seqs_ITS_demux-paired-end.qzv
+
+## Cruise 2/4
+qiime demux summarize \
+--i-data Cruise2_4Seqs_16S_demux-paired-end.qza \
+--o-visualization Cruise2_4_Seqs_16S_demux-paired-end.qzv
+
+qiime demux summarize \
+--i-data Cruise2_4Seqs_18S_demux-paired-end.qza \
+--o-visualization Cruise2_4Seqs_18S_demux-paired-end.qzv
+
+qiime demux summarize \
+--i-data Cruise2_4Seqs_ITS_demux-paired-end.qza \
+--o-visualization Cruise2_4Seqs_ITS_demux-paired-end.qzv
+
+# Denoise Sequences
+## 16S
+### Cruise 1
+    qiime dada2 denoise-paired \
+    --i-demultiplexed-seqs Cruise1Seqs_16S_demux-paired-end.qza \
+    --output-dir ./dd2_16S \
+    --o-representative-sequences Cruise1Seqs_16S_rep-seqs \
+    --p-trim-left-f 10 \
+    --p-trim-left-r 10 \
+    --p-trunc-len-f 295 \
+    --p-trunc-len-r 265 \
+    --p-n-threads 12
+
+    qiime dada2 denoise-paired \
+    --i-demultiplexed-seqs Cruise1Seqs_dropped_demux-paired-end.qza \
+    --output-dir ./dd2_dropped \
+    --o-representative-sequences Cruise1Seqs_drpped_rep-seqs \
+    --p-trunc-len-f 295 \
+    --p-trunc-len-r 265 \
+    --p-n-threads  \
+    --verbose
+
+### Cruise 3
+qiime dada2 denoise-paired \
+--i-demultiplexed-seqs Cruise3Seqs_16S_demux-paired-end.qza \
+--output-dir ./dd2_16S \
+--o-representative-sequences Cruise3Seqs_16S_rep-seqs \
+--p-trim-left-f 10 \
+--p-trim-left-r 10 \
+--p-trunc-len-f 295 \
+--p-trunc-len-r 265 \
+--p-n-threads 12
+
+### Cruise 2/4
+qiime dada2 denoise-paired \
+--i-demultiplexed-seqs Cruise2_4Seqs_16S_demux-paired-end.qza \
+--output-dir ./dd2_16S \
+--o-representative-sequences Cruise2_4Seqs_16S_rep-seqs \
+--p-trim-left-f 10 \
+--p-trim-left-r 10 \
+--p-trunc-len-f 295 \
+--p-trunc-len-r 275 \
+--p-n-threads 12 --verbose
+
+## 18S
+### Cruise 1
+    qiime dada2 denoise-paired \
+    --i-demultiplexed-seqs Cruise1Seqs_18S_demux-paired-end.qza \
+    --output-dir ./dd2_18S \
+    --o-representative-sequences Cruise1Seqs_18S_rep-seqs \
+    --p-trim-left-f 10 \
+    --p-trim-left-r 10 \
+    --p-trunc-len-f 295 \
+    --p-trunc-len-r 265 \
+    --p-n-threads 12
+
+### Cruise 3
+qiime dada2 denoise-paired \
+--i-demultiplexed-seqs Cruise3Seqs_18S_demux-paired-end.qza \
+--output-dir ./dd2_18SRD \
+--o-representative-sequences Cruise3Seqs_18S_rep-seqsRD \
+--p-trim-left-f 10 \
+--p-trim-left-r 10 \
+--p-trunc-len-f 295 \
+--p-trunc-len-r 265 \
+--p-n-threads 12 --verbose
+
+
+### Cruise 2/4
+qiime dada2 denoise-paired \
+--i-demultiplexed-seqs Cruise2_4Seqs_18S_demux-paired-end.qza \
+--output-dir ./dd2_18SRD \
+--o-representative-sequences Cruise2_4Seqs_18S_rep-seqsRD \
+--p-trim-left-f 10 \
+--p-trim-left-r 10 \
+--p-trunc-len-f 295 \
+--p-trunc-len-r 275 \
+--p-n-threads 12 --verbose
+
+## ITS
+### Cruise 1
+    qiime dada2 denoise-paired \
+    --i-demultiplexed-seqs Cruise1Seqs_ITS_demux-paired-end.qza \
+    --output-dir ./dd2_ITS \
+    --o-representative-sequences Cruise1Seqs_ITS_rep-seqs \
+    --p-trim-left-f 10 \
+    --p-trim-left-r 10 \
+    --p-trunc-len-f 295 \
+    --p-trunc-len-r 265 \
+    --p-n-threads 12 --verbose
+
+### Cruise 3
+    qiime dada2 denoise-paired \
+    --i-demultiplexed-seqs Cruise3Seqs_ITS_demux-paired-end.qza \
+    --output-dir ./dd2_ITS \
+    --o-representative-sequences Cruise3Seqs_ITS_rep-seqs \
+    --p-trim-left-f 10 \
+    --p-trim-left-r 10 \
+    --p-trunc-len-f 295 \
+    --p-trunc-len-r 265 \
+    --p-n-threads 12 --verbose
+
+
+### Cruise 2/4
+    qiime dada2 denoise-paired \
+    --i-demultiplexed-seqs Cruise2_4Seqs_ITS_demux-paired-end.qza \
+    --output-dir ./dd2_ITS \
+    --o-representative-sequences Cruise2_4Seqs_ITS_rep-seqs \
+    --p-trim-left-f 10 \
+    --p-trim-left-r 10 \
+    --p-trunc-len-f 295 \
+    --p-trunc-len-r 275 \
+    --p-n-threads 12 --verbose
+
+# Sumarize Data per sample
+    qiime feature-table summarize \
+    --i-table ./16Smerged_table.qza \
+    --o-visualization ./16Smerged_table.qzv \
+    --m-sample-metadata-file ./16SMetaData.txt
+
+    qiime feature-table summarize \
+    --i-table ./Cruise1_3_16Smerged_table.qza \
+    --o-visualization ./Cruise1_3_16Smerged_table.qzv \
+    --m-sample-metadata-file ./16SMetaData_Cruise1_3.txt
+
+# Merge 16S data
+
+## Feature-Table
+   qiime feature-table merge --i-tables ./dd2_16S/table.qza --i-tables ./dd2_dropped/table.qza --o-merged-table 16Smerged_table.qza
+
+   qiime feature-table merge --i-tables ./dd2_16S/table.qza --i-tables ./../Cruise1_Qiime/16Smerged_table.qza --o-merged-table Cruise1_3_16Smerged_table.qza
+
+   qiime feature-table merge --i-tables ./dd2_16S/table.qza --i-tables ./../Cruise3_Qiime/Cruise1_3_16Smerged_table.qza --o-merged-table CruiseAll_16Smerged_table.qza
+
+##Representative Sequences
+   qiime feature-table merge-seqs --i-data Cruise1Seqs_drpped_rep-seqs.qza --i-data Cruise1Seqs_16S_rep-seqs.qza --o-merged-data merged_16S_rep-seqs.qza
+
+   qiime feature-table merge-seqs --i-data ./../Cruise1_Qiime/merged_16S_rep-seqs.qza --i-data Cruise3Seqs_16S_rep-seqs.qza --o-merged-data Cruise1_3_16S_rep-seqs.qza
+
+   qiime feature-table merge-seqs --i-data ./../Cruise3_Qiime/Cruise1_3_16S_rep-seqs.qza --i-data Cruise2_4Seqs_16S_rep-seqs.qza --o-merged-data CruiseAll_16Smerged_rep-seqs.qza
+
+
+# Merge 18S data
+
+## Feature-Table
+   qiime feature-table merge --i-tables ./dd2_18SRD/table.qza --i-tables ./../Cruise1_Qiime/dd2_18S/table.qza --o-merged-table Cruise1_3_18Smerged_tableRD.qza
+
+    qiime feature-table merge --i-tables ./dd2_18SRD/table.qza --i-tables ./../Cruise3_Qiime/Cruise1_3_18Smerged_tableRD.qza --o-merged-table CruiseAll_18Smerged_table.qza
+
+## Representative Sequences
+
+    qiime feature-table merge-seqs --i-data ./../Cruise1_Qiime/Cruise1Seqs_18S_rep-seqs.qza --i-data Cruise3Seqs_18S_rep-seqsRD.qza --o-merged-data Cruise1_3_18S_rep-seqsRD.qza
+
+ qiime feature-table merge-seqs --i-data ./../Cruise3_Qiime/Cruise1_3_18S_rep-seqsRD.qza --i-data Cruise2_4Seqs_18S_rep-seqsRD.qza --o-merged-data CruiseAll_18Smerged_rep-seqs.qza
+
+
+#Merge ITS data
+
+## Feature Table
+    qiime feature-table merge --i-tables ./dd2_ITS/table.qza --i-tables ./../Cruise1_Qiime/dd2_ITS/table.qza --o-merged-table Cruise1_3_ITSmerged_table.qza
+
+    qiime feature-table merge --i-tables ./dd2_ITS/table.qza --i-tables ./../Cruise3_Qiime/Cruise1_3_ITSmerged_table.qza --o-merged-table CruiseAll_ITSmerged_table.qza
+
+## Representative Sequences
+    qiime feature-table merge-seqs --i-data ./../Cruise1_Qiime/Cruise1Seqs_ITS_rep-seqs.qza --i-data Cruise3Seqs_ITS_rep-seqs.qza --o-merged-data Cruise1_3_ITS_rep-seqs.qza
+
+    qiime feature-table merge-seqs --i-data ./../Cruise3_Qiime/Cruise1_3_ITS_rep-seqs.qza --i-data Cruise2_4Seqs_ITS_rep-seqs.qza --o-merged-data CruiseAll_ITSmerged_rep-seqs.qza
+
+mv ./*merged* ./../CruiseAll_Qiime
+cd ./../CruiseAll_Qiime
+
+# 99% Cluster across three (4ish bc of dropped samples) sequencing runs
+##16S
+qiime vsearch cluster-features-de-novo --i-sequences CruiseAll_16Smerged_rep-seqs.qza --i-table CruiseAll_16Smerged_table.qza --p-perc-identity .99 --p-threads 7 --o-clustered-table CruiseAll_16Smerged_table99.qza --o-clustered-sequences CruiseAll_16Smerged_rep-seqs99.qza --verbose
+
+##18S
+
+qiime vsearch cluster-features-de-novo --i-sequences CruiseAll_18Smerged_rep-seqs.qza --i-table CruiseAll_18Smerged_table.qza --p-perc-identity .99 --p-threads 7 --o-clustered-table CruiseAll_18Smerged_table99.qza --o-clustered-sequences CruiseAll_18Smerged_rep-seqs99.qza --verbose
+
+#ITS
+
+qiime vsearch cluster-features-de-novo --i-sequences CruiseAll_ITSmerged_rep-seqs.qza --i-table CruiseAll_ITSmerged_table.qza --p-perc-identity .99 --p-threads 7 --o-clustered-table CruiseAll_ITSmerged_table99.qza --o-clustered-sequences CruiseAll_ITSmerged_rep-seqs99.qza --verbose
+
+# Classify taxonomy
+
+## primered 16S
+
+        qiime feature-classifier classify-sklearn \
+        --i-classifier ./../Cruise3_Qiime/silva-138-99-seqs-primered_classifier.qza \
+        --i-reads CruiseAll_16Smerged_rep-seqs99.qza \
+        --o-classification CruiseAll_16Smerged99_taxonomy.qza \
+        --verbose
+
+        qiime metadata tabulate \
+        --m-input-file CruiseAll_16Smerged99_taxonomy.qza \
+        --o-visualization CruiseAll_16Smerged99_taxonomy.qzv
+
+        qiime tools export \
+        --input-path CruiseAll_16Smerged99_taxonomy.qza \
+        --output-path silva16S_Primered_taxonomy
+
+        mv ./silva16S_Primered_taxonomy/taxonomy.tsv ./silva16S_Primered_taxonomy.tsv
+        rm -r ./silva16S_Primered_taxonomy
+
+## unprimered 16S
+
+qiime feature-classifier fit-classifier-naive-bayes --i-reference-reads silva-138-99-seqs.qza --i-reference-taxonomy silva-138-99-tax.qza --o-classifier silva-138-99_classifier.qza
+
+
+## 18S with unprimered Silva
+
+qiime feature-classifier classify-sklearn \
+--i-classifier silva-138-99_classifier.qza \
+--i-reads CruiseAll_18Smerged_rep-seqs99.qza \
+--o-classification CruiseAll_18Smerged99_SILVAtaxonomy.qza \
+--p-n-jobs 8 \
+--verbose
+
+qiime metadata tabulate --m-input-file CruiseAll_18Smerged99_SILVAtaxonomy.qza --o-visualization CruiseAll_18Smerged99_SILVAtaxonomy.qzv
+
+
+#18S with primered pr2
+
+qiime feature-classifier classify-sklearn --i-classifier ./../Cruise1_Qiime/pr2_v4_classifier.qza --i-reads CruiseAll_18Smerged_rep-seqs99.qza --o-classification CruiseAll_18Smerged_taxonomy.qza
+
+qiime metadata tabulate --m-input-file CruiseAll_18Smerged_taxonomy.qza --o-visualization CruiseAll_18Smerged_taxonomy.qzv
+
+qiime tools export \
+--input-path CruiseAll_18Smerged_taxonomy.qza \
+--output-path PR218S_Primered_taxonomy
+
+mv ./PR218S_Primered_taxonomy/taxonomy.tsv ./PR218S_Primered_taxonomy.tsv
+rm -r ./PR218S_Primered_taxonomy
+
+#18S with unprimered pr2
+
+qiime feature-classifier classify-sklearn --i-classifier ./../Cruise1_Qiime/pr2_classifier.qza --i-reads CruiseAll_18Smerged_rep-seqs99.qza --o-classification CruiseAll_18Smerged_unprimered_taxonomy.qza
+
+qiime metadata tabulate --m-input-file CruiseAll_18Smerged_unprimered_taxonomy.qza --o-visualization CruiseAll_18Smerged_unprimered_taxonomy.qzv
+
+## ITS Taxonomy
+qiime feature-classifier classify-sklearn --i-classifier ./../Cruise3_Qiime/unite_ver9_99_29.11.2022-Q2-2023.2.qza --i-reads CruiseAll_ITSmerged_rep-seqs99.qza --o-classification CruiseAll_ITSmerged99_taxonomy.qza \
+--verbose
+
+qiime metadata tabulate --m-input-file CruiseAll_ITSmerged99_taxonomy.qza --o-visualization CruiseAll_ITSmerged99_taxonomy.qzv
+
+qiime tools export \
+--input-path CruiseAll_ITSmerged99_taxonomy.qza \
+--output-path ITS_taxonomy
+
+mv ./ITS_taxonomy/taxonomy.tsv ./ITS_taxonomy.tsv
+rm -r ./ITS_taxonomy
+
+*RETRY ITS with UNITE database including all instead of just fungi*
+https://github.com/colinbrislawn/unite-train/releases
+
+qiime feature-classifier classify-sklearn --i-classifier ./unite_ver9_99_all_29.11.2022-Q2-2023.2.qza --i-reads CruiseAll_ITSmerged_rep-seqs99.qza --o-classification CruiseAll_ITSmerged99all_taxonomy.qza \
+--verbose
+
+qiime tools export \
+--input-path CruiseAll_ITSmerged99all_taxonomy.qza \
+--output-path ITSall_taxonomy
+
+mv ./ITSall_taxonomy/taxonomy.tsv ./ITSall_taxonomy.tsv
+rm -r ./ITSall_taxonomy
+
+## prep PR2 classifier
+Import taxonomy database:
+
+qiime tools import --type 'FeatureData[Sequence]' --input-path pr2_version_5.0.0_SSU_mothur.fasta --output-path pr2.qza
+
+qiime tools import --type 'FeatureData[Taxonomy]' --input-format HeaderlessTSVTaxonomyFormat --input-path pr2_version_5.0.0_SSU_mothur.tax --output-path pr2_tax.qza
+
+qiime feature-classifier extract-reads --i-sequences pr2.qza --p-f-primer CCAGCASCYGCGGTAATTCC --p-r-primer ACTTTCGTTCTTGATYRA --o-reads pr2_v4.qza
+
+qiime feature-classifier fit-classifier-naive-bayes --i-reference-reads pr2_v4.qza --i-reference-taxonomy pr2_tax.qza --o-classifier pr2_v4_classifier.qza
+
+qiime feature-classifier fit-classifier-naive-bayes --i-reference-reads pr2.qza --i-reference-taxonomy pr2_tax.qza --o-classifier pr2_classifier.qza
+
+qiime feature-classifier classify-sklearn --i-classifier pr2_v4_classifier.qza --i-reads Cruise1Seqs_18S_rep-seqs.qza --o-classification taxonomy.qza
+
+
+### Get tsv of taxonomy:
+
+            qiime tools export \
+            --input-path merged_16S_taxonomy.qza \
+            --output-path merged_16S_rep-seqs.fasta
+
+            qiime tools export \
+            --input-path taxonomy.qza \
+            --output-path pr2_taxonomy
