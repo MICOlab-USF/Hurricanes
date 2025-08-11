@@ -1,0 +1,579 @@
+---
+title: "Amplicons"
+author: "Maggi Brisbin"
+date: "2025-07-02"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Set up: import packages and functions, define colors
+```{r imports, message = FALSE}
+library(qiime2R)
+library(CoDaSeq)
+library(phyloseq)
+library(ggplot2)
+library(tidyr)
+library("dplyr")
+library("gridExtra")
+library(viridis)
+library(tidyr)
+library(magrittr)
+library(vegan)
+library(stringr)
+
+`%ni%` = Negate(`%in%`)
+
+colors=c('#e9e9e9','#C14450','#f0b08f','#c2aba6','#60555f','#3c6481','#9fd6e6','#256F64','#63a375')
+
+red<- c("#EB8B8E","#FBD5E2","#E7B6AF","#AC6873", "#D82354")
+orange <- c("#FAAA6D","#FECF92")
+yellow <- c("#FFC317","#F7F4B7", "#CC9C3C")
+green <- c("#16866F","#1E3F1C","#99A339","#516A65","#8BC89F")
+blue <- c("#005694","#B7E1DD","#66879E","#1BAAE2","#5FC8D8")
+purple <- c("#E7D7CE","#A699A9","#434582","#81347D", "#B5218E")
+
+colors30 <- c(blue, purple, red, yellow, orange, green, "black")
+```
+
+```{r functions, message=FALSE}
+scripts <- c("graphical_methods.R",
+             "tree_methods.R",
+             "plot_merged_trees.R",
+             "specificity_methods.R",
+             "ternary_plot.R",
+             "richness.R",
+             "edgePCA.R",
+             "copy_number_correction.R",
+             "import_frogs.R",
+             "prevalence.R",
+             "compute_niche.R")
+urls <- paste0("https://raw.githubusercontent.com/mahendra-mariadassou/phyloseq-extended/master/R/", scripts)
+
+for (url in urls) {
+  source(url)
+}
+```
+
+# Cruise Station Location
+
+```{r}
+stations <- read.csv("CruiseAll_station_locs.csv")
+stations$Cruise_Station <- paste(stations$Cruise_Name, stations$Station_Name, sep = "_")
+```
+
+
+
+#16S 
+## 16S feature table and metadata
+```{r 16S_ft_and_metadata}
+ps16S<-qza_to_phyloseq(features="CruiseAll_16Smerged_table99.qza")
+
+meta16S<- read.csv("16SMetaData_CruiseAll.csv", header = TRUE)
+
+meta16S$Station_Type <-  paste(meta16S$Station, meta16S$Sample_Type, sep = "_")
+meta16S$Station_Type_Depth <- paste(meta16S$Station_Type, meta16S$Depth, sep = "_")
+meta16S$Month <- factor(meta16S$Month, levels = c("October", "November", "December", "February"))
+
+
+
+meta16S$Filter <- as.character(meta16S$Filter)
+meta16S$Cruise_Station <- paste(meta16S$Cruise_Name, meta16S$Station, sep = "_")
+meta16S <- left_join(meta16S, stations)
+meta16S <- as.data.frame(meta16S)
+
+row.names(meta16S)<- meta16S$SampleID
+
+
+META16S <- sample_data(meta16S)
+```
+
+
+## 18S metadata
+```{r 18S_ft_and_metadata}
+
+meta18S<- read.csv("18SMetaData.csv", header = TRUE)
+
+meta18S$Station_Type <-  paste(meta18S$Station, meta18S$Sample_Type, sep = "_")
+meta18S$Station_Type_Depth <- paste(meta18S$Station_Type, meta18S$Depth, sep = "_")
+meta18S$Month <- factor(meta18S$Month, levels = c("October", "November", "December", "February"))
+
+
+
+meta18S$Filter <- as.character(meta18S$Filter)
+meta18S$Cruise_Station <- paste(meta18S$Cruise_Name, meta18S$Station, sep = "_")
+meta18S <- left_join(meta18S, stations)
+meta18S <- as.data.frame(meta18S)
+
+row.names(meta18S)<- meta18S$SampleID
+
+
+META18S <- sample_data(meta18S)
+```
+## ITS 
+```{r ITS_ft_and_metadata}
+metaITS<- read.csv("ITSMetaData.csv", header = TRUE)
+
+metaITS$Station_Type <-  paste(metaITS$Station, metaITS$Sample_Type, sep = "_")
+metaITS$Station_Type_Depth <- paste(metaITS$Station_Type, metaITS$Depth, sep = "_")
+metaITS$Month <- factor(metaITS$Month, levels = c("October", "November", "December", "February"))
+
+metaITS$Filter <- as.character(metaITS$Filter)
+metaITS$Cruise_Station <- paste(metaITS$Cruise_Name, metaITS$Station, sep = "_")
+metaITS <- left_join(metaITS, stations)
+metaITS <- as.data.frame(metaITS)
+
+row.names(metaITS)<- metaITS$SampleID
+
+METAITS <- sample_data(metaITS)
+```
+
+
+```{r 16Stax}
+
+taxonomy16S <-read.table(file = 'silva16S_Primered_taxonomy.tsv', sep = '\t', header = TRUE)
+
+names(taxonomy16S) <- c("row", "tax", "Confidence") #change the headers (column names)
+row.names(taxonomy16S) <-taxonomy16S[[1]] #move the feature ID column to become the row names
+taxonomy16S <- taxonomy16S[,(-1)] #delete the feature ID  column 
+taxonomy16S <-  separate(taxonomy16S, tax, c("Domain","Phylum", "Class", "Order", "Family", "Genus", "Species", "D7", "D8", "D9", "D10", "D11", "D12", "D13", "D14"), sep = ";", fill = "right")
+taxonomy16S <- taxonomy16S[,c(1:7)]
+
+taxonomy16S$D0 <- with(taxonomy16S, ifelse(Order == " o__Chloroplast", "Chloroplast", "Bacteria"))
+
+col_order<- c("D0", "Domain","Phylum", "Class", "Order", "Family", "Genus", "Species" )
+taxonomy16S<- taxonomy16S[, col_order]
+
+taxmat16S <- as.matrix(taxonomy16S)
+TAX16S = tax_table(taxmat16S)
+```
+
+Make phyloseq object:
+```{r physeq_obj_16S}
+ps16S = merge_phyloseq(ps16S, TAX16S, META16S) 
+```
+
+## Chloroplast analysis
+
+Plot relative abundance as stacked bar plot (all samples including chloroplast sequences):
+
+```{r chloroplast_plot, fig.width=10}
+ps16S<- subset_taxa(ps16S, D0 %in% c("Bacteria", "Chloroplast") )
+ps16S <- subset_samples(ps16S, Full_Sample_Name %ni% c("stn_3_12/16/24_UW", "stn_2_12/16/24_UW"))
+psra_16Schl<- transform_sample_counts(ps16S, function(OTU) 100* OTU/sum(OTU))
+glomD16S<- tax_glom(psra_16Schl, 'D0')
+
+
+taxabarplot<-plot_bar(glomD16S, x= "Station", fill = "D0") +  scale_y_continuous(expand = c(0, 0)) + ggtitle("")  + theme(legend.title=element_blank()) + geom_bar(aes(fill=D0), stat="identity", position="stack", width =0.9) +theme_classic() + theme(text = element_text(size=14))+theme(axis.text.x = element_text(angle = 90)) + xlab("Sample") + ylab("Relative Abundance (%)") + theme(text = element_text(size=14)) + scale_fill_manual(values=c("lightgrey", "#7BB03B"), name = "") + xlab("") +facet_grid(Filter~Month+Depth+Sample_Type, scales = "free_x") 
+
+taxabarplot
+```
+
+Remove chloroplast sequences from data:
+
+```{r filter_16S_ps_obj}
+ps16S_nochloro <- subset_taxa(ps16S, Order != " o__Chloroplast" & Domain != "Unassigned")
+```
+
+
+
+** need to separate out chloroplast seqs and classify with phytoref 
+
+
+## Alpha diversity
+### ASV Richness
+
+```{r}
+
+totalOTU <- data.frame(otu_table(ps16S_nochloro))
+totalOTU$rowsu <- rowSums(totalOTU)
+totalOTUnotzero <- totalOTU %>% filter(rowsu >1)
+dim(totalOTUnotzero)
+
+```
+
+166 samples 
+85,320 ASVs with at least 1 count
+
+```{r}
+plugin <- ps16S_nochloro %>%
+            estimate_richness(measures = "Observed") %$% Observed
+Filter <- ps16S_nochloro %>% sample_data %$% Filter
+Cruise <- ps16S_nochloro %>% sample_data %$% Cruise_Name
+Depth <- ps16S_nochloro %>% sample_data %$% Depth
+Station <- ps16S_nochloro %>% sample_data %$% Station
+Month <- ps16S_nochloro %>% sample_data %$% Month
+
+richness<- data.frame(plugin, Filter, Cruise, Depth, Station, Month )
+names(richness) <- c("richness", "Filter", "Cruise", "Depth", "Station", "Month")
+
+
+richness %>%group_by(Filter, Cruise, Depth) %>% summarize(mean = mean(richness), min = min(richness), max = max(richness))
+
+```
+
+```{r}
+
+RichPlot<- richness %>% ggplot( aes(x=Station, y=richness, color = Month, shape = Filter))+ geom_point() + theme_bw()  +ylab("Observed Richness") +ggtitle("")+ theme(panel.grid.minor = element_blank(), panel.grid.major = element_blank()) +xlab("") + facet_grid(~Depth, scales = "free_x")
+
+RichPlot
+```
+
+```{r}
+RichPlot<- richness %>% filter(Depth == "Surface") %>%  ggplot( aes(x=Station, y=richness))+ geom_point(aes(fill = Month, shape = Depth), size = 2) + theme_bw()  +ylab("Observed Richness") +ggtitle("")+ theme(panel.grid.minor = element_blank(), panel.grid.major = element_blank()) +xlab("") + facet_grid(~Filter, scales = "free_x") +scale_fill_manual(values=c(blue[1:5] ))  + scale_shape_manual(values= c(21,24))
+RichPlot
+```
+
+
+
+
+
+## Beta Diversity
+### Bar Plots
+#### Order
+```{r}
+ps16S_nochloro_RA<- transform_sample_counts(ps16S_nochloro, function(OTU) 100* OTU/sum(OTU))
+
+ps16S_nochloro_RA_glomO<- tax_glom(ps16S_nochloro_RA, 'Order')
+```
+
+
+Order 
+```{r}
+ps16S_RA_glomO_F = filter_taxa(ps16S_nochloro_RA_glomO , function(x) sum(x) > 1, TRUE)
+                       
+taxabarplot<-plot_bar(ps16S_RA_glomO_F, x= "Station", fill = "Order") +  scale_y_continuous(expand = c(0, 0)) + ggtitle("")  + theme(legend.title=element_blank()) + geom_bar(aes(fill=Order), stat="identity", position="stack", width =0.9) +theme_classic() + theme(text = element_text(size=14))+theme(axis.text.x = element_text(angle = 90)) + xlab("Sample") + ylab("Relative Abundance (%)") + theme(text = element_text(size=14)) + scale_fill_manual(values= rep( colors30, 30))+ xlab("")  +facet_grid(Month+Depth~Filter, scales = "free_x") 
+
+taxabarplot + theme(legend.position = "none")
+```
+
+## PCoA 
+
+```{r}
+surfacebact<- subset_samples(ps16S_nochloro, Depth == "Surface")
+OTU4clr<- data.frame(t(data.frame(otu_table(surfacebact))))
+row.names(OTU4clr) <- str_remove(row.names(OTU4clr), "X")
+row.names(OTU4clr) <- gsub("\\.", "-", row.names(OTU4clr))
+OTUs.clr <- codaSeq.clr(OTU4clr + 0.5, samples.by.row=TRUE)
+OTU2 <- otu_table(as.matrix(OTUs.clr), taxa_are_rows = FALSE)
+
+psCLR <- phyloseq(OTU2,TAX16S,META16S)
+
+ordu = ordinate(psCLR, "PCoA", "euclidean")
+
+p<-plot_ordination(psCLR, ordu)+theme_bw()  +  theme(text = element_text(size=14)) +  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgrey") +  geom_vline(xintercept = 0, linetype = "dashed", color = "lightgrey") + 
+  theme(panel.grid.minor = element_blank(), panel.grid.major = element_blank()) +
+  geom_point(aes(fill=Month, shape = Filter), size =3)  + scale_shape_manual(values= c(21,24)) +scale_fill_manual(values=c(blue[1:3], purple[2:4], green[1:3], yellow[1:3])) +guides(fill = guide_legend(override.aes=list(shape=21))) #+   geom_text(aes(label = Station), hjust = 0, nudge_x = 2)
+p
+
+```
+
+```{r}
+p<-plot_ordination(psCLR, ordu)+theme_bw()  +  theme(text = element_text(size=14)) +  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgrey") +  geom_vline(xintercept = 0, linetype = "dashed", color = "lightgrey") + 
+  theme(panel.grid.minor = element_blank(), panel.grid.major = element_blank()) +
+  geom_point(aes(fill=Filter, shape = Depth), size =3)  + scale_shape_manual(values= c(21,24)) +scale_fill_manual(values=c(purple[2:4], green[1:3], yellow[1:3])) +guides(fill = guide_legend(override.aes=list(shape=21))) #+ geom_text(aes(label = Station), hjust = 0, nudge_x = 2)
+p
+```
+
+```{r}
+p<-plot_ordination(psCLR, ordu)+theme_bw()  +  theme(text = element_text(size=14)) +  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgrey") +  geom_vline(xintercept = 0, linetype = "dashed", color = "lightgrey") + 
+  theme(panel.grid.minor = element_blank(), panel.grid.major = element_blank()) +
+  geom_point(aes(fill=Sample_Type, shape = Depth), size =3)  + scale_shape_manual(values= c(21,24)) +scale_fill_manual(values=c( green[1:3], yellow[1:3])) +guides(fill = guide_legend(override.aes=list(shape=21))) #+ geom_text(aes(label = Station), hjust = 0, nudge_x = 2)
+p
+```
+
+
+```{r}
+cb <- c("#004488", "#33CCEE", "#6699CC", "#CC6677", "#882255", "#AA4499", "#009988", "#117733", "#999933", "#DDCC77", "#EE7733", "#CC3311", "grey", "black")
+
+p<-plot_ordination(psCLR, ordu)+theme_bw()  +  theme(text = element_text(size=14)) +  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgrey") +  geom_vline(xintercept = 0, linetype = "dashed", color = "lightgrey") + 
+  theme(panel.grid.minor = element_blank(), panel.grid.major = element_blank()) +
+  geom_point(aes(fill=Station, shape = Cruise_Name), size =3)  + scale_shape_manual(values= c(21,24,22,23)) +scale_fill_manual(values=rep(cb, 20)) +guides(fill = guide_legend(override.aes=list(shape=21))) #+ geom_text(aes(label = Station), hjust = 0, nudge_x = 2)
+p
+
+```
+
+3.0
+
+```{r}
+
+particles <- subset_samples(surfacebact, Filter == "3")
+
+OTU4clr<- data.frame(t(data.frame(otu_table(particles))))
+row.names(OTU4clr) <- str_remove(row.names(OTU4clr), "X")
+row.names(OTU4clr) <- gsub("\\.", "-", row.names(OTU4clr))
+OTUs.clr <- codaSeq.clr(OTU4clr + 0.5, samples.by.row=TRUE)
+OTU2 <- otu_table(as.matrix(OTUs.clr), taxa_are_rows = FALSE)
+
+psCLR <- phyloseq(OTU2,TAX16S,META16S)
+
+ordu = ordinate(psCLR, "PCoA", "euclidean")
+
+p<-plot_ordination(psCLR, ordu)+theme_bw()  +  theme(text = element_text(size=14)) +  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgrey") +  geom_vline(xintercept = 0, linetype = "dashed", color = "lightgrey") + 
+  theme(panel.grid.minor = element_blank(), panel.grid.major = element_blank()) +
+  geom_point(aes(fill=Month, shape = Depth), size =3)  + scale_shape_manual(values= c(21,24)) +scale_fill_manual(values=c(blue[1:3], purple[2:4], green[1:3], yellow[1:3])) +guides(fill = guide_legend(override.aes=list(shape=21))) + ggtitle("3.0 µm size-fraction") +   geom_text(aes(label = Station), hjust = 0, nudge_x = 2) 
+p
+```
+
+```{r}
+free <- subset_samples(surfacebact, Filter == "0.2")
+
+OTU4clr<- data.frame(t(data.frame(otu_table(free))))
+row.names(OTU4clr) <- str_remove(row.names(OTU4clr), "X")
+row.names(OTU4clr) <- gsub("\\.", "-", row.names(OTU4clr))
+OTUs.clr <- codaSeq.clr(OTU4clr + 0.5, samples.by.row=TRUE)
+OTU2 <- otu_table(as.matrix(OTUs.clr), taxa_are_rows = FALSE)
+
+psCLR <- phyloseq(OTU2,TAX16S,META16S)
+
+ordu = ordinate(psCLR, "PCoA", "euclidean")
+
+f<-plot_ordination(psCLR, ordu)+theme_bw()  +  theme(text = element_text(size=14)) +  geom_hline(yintercept = 0, linetype = "dashed", color = "lightgrey") +  geom_vline(xintercept = 0, linetype = "dashed", color = "lightgrey") + 
+  theme(panel.grid.minor = element_blank(), panel.grid.major = element_blank()) +
+  geom_point(aes(fill=Month, shape = Depth), size =3)  + scale_shape_manual(values= c(21,24)) +scale_fill_manual(values=c(blue[1:3], purple[2:4], green[1:3], yellow[1:3])) +guides(fill = guide_legend(override.aes=list(shape=21))) + ggtitle("0.2 µm size-fraction") +   geom_text(aes(label = Station), hjust = 0, nudge_x = 2) 
+f
+```
+
+```{r}
+library(patchwork)
+p+f + plot_layout(guides = "collect")
+```
+
+#GeoPlot 16S 
+
+```{r warning=FALSE}
+library(ggspatial)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(sf)
+library(scatterpie)
+world <- ne_countries(scale = "medium", returnclass = "sf")
+```
+
+
+```{r}
+FT_scatterpie_plot<-ggplot(data = world) + geom_sf(lwd = 0) + theme_bw() +
+  coord_sf(xlim = c(-84, -82.2), ylim = c(27, 28), expand = TRUE)+ theme(legend.position = "bottom") +
+  geom_jitter(data = stations, aes (x= Longitude, y= Latitude, color = Cruise_Name), size = 1)
+
+FT_scatterpie_plot
+```
+
+## make metadata for SRA 
+### 16S
+4 decimal points for geoloc 
+remove - sign from Longigude 
+add N and W 
+join by comma
+```{r}
+SRA <- left_join(meta16S, stations) 
+
+SRA$Latitude <- round(SRA$Latitude, 3)
+SRA$Longitude <-  round(SRA$Longitude, 3)
+SRA$Longitude <- SRA$Longitude* -1
+
+SRA$Lat_Long <- paste0(SRA$Latitude, " N ", SRA$Longitude, " W" )
+
+SRA$Method <- paste(SRA$Sample_Type, SRA$Filter, sep = "_")
+write.csv(SRA, "16S_metadata_4SRA.csv")
+```
+
+### 18S
+```{r}
+SRA18 <- left_join(meta18S, stations) 
+
+SRA18$Latitude <- round(SRA18$Latitude, 3)
+SRA18$Longitude <-  round(SRA18$Longitude, 3)
+SRA18$Longitude <- SRA18$Longitude* -1
+
+SRA18$Lat_Long <- paste0(SRA18$Latitude, " N ", SRA18$Longitude, " W" )
+
+SRA18$Method <- paste(SRA18$Sample_Type, SRA18$Filter, sep = "_")
+write.csv(SRA18, "18S_metadata_4SRA.csv")
+```
+
+### ITS
+```{r}
+SRAits <- left_join(metaITS, stations) 
+
+SRAits$Latitude <- round(SRAits$Latitude, 3)
+SRAits$Longitude <-  round(SRAits$Longitude, 3)
+SRAits$Longitude <- SRAits$Longitude* -1
+
+SRAits$Lat_Long <- paste0(SRAits$Latitude, " N ", SRAits$Longitude, " W" )
+
+SRAits$Method <- paste(SRAits$Sample_Type, SRAits$Filter, sep = "_")
+write.csv(SRAits, "ITS_metadata_4SRA.csv")
+```
+
+
+```{r}
+mergemelt<- psmelt(ps16S_RA_glomO_F)
+
+mergemelt$Order<-str_sub(mergemelt$Order, 5, str_length(mergemelt$Order))
+
+mergemelt<- mergemelt %>% filter(Depth == "Surface") %>%  filter(Abundance>1)
+
+mergemelt$Order[mergemelt$Abundance < 2] <- "z< 2% abund."
+
+mergemelt<- mergemelt %>% 
+  filter(!str_detect(Order, "Candidatus")) %>% filter(Order != "") %>% filter(!str_detect(Order, "uncultured")) %>% filter(!str_detect(Order, "ncertae_Sedis")) 
+
+spatial_plot <- ggplot(data=mergemelt, aes(x=Station, y=Abundance, fill=Order)) + facet_grid(Filter~ Month, scales = "free_x")
+
+spatial_plot + geom_bar(aes(), stat="identity", position="stack") + 
+  theme_classic() + theme(legend.position="bottom") + scale_fill_manual(values = rep(c(colors30, "green", "red", "grey", "navyblue", "purple", "hotpink" ), 2)) +guides(fill=guide_legend(ncol=6)) + theme(legend.title =element_blank()) + theme(legend.position = "bottom")
+```
+
+```{r}
+mergemelt<- psmelt(ps16S_RA_glomO_F)
+
+mergemelt$Order<-str_sub(mergemelt$Order, 5, str_length(mergemelt$Order))
+
+mergemelt<- mergemelt %>% filter(Depth == "Surface") %>% filter(Filter == "3") %>%   filter(Abundance>1)
+
+mergemelt$Order[mergemelt$Abundance < 2.1] <- "z< 2% abund."
+
+mergemelt<- mergemelt %>% 
+  filter(!str_detect(Order, "Candidatus")) %>% filter(Order != "") %>% filter(!str_detect(Order, "uncultured")) %>% filter(!str_detect(Order, "ncertae_Sedis")) 
+
+
+mergemelt3 <- mergemelt %>% select(Station, Order, Abundance, Cruise_Name, Latitude, Longitude, Month) %>% group_by(Station, Order, Cruise_Name, Latitude, Longitude, Month) %>%  summarize(abund = sum(Abundance)) %>% ungroup()
+
+wider_a4long_locs<- mergemelt3 %>%  select(Cruise_Name, Station, Order, abund, Latitude, Longitude, Month) %>% pivot_wider( names_from = c("Order"), values_from = c("abund"))
+
+strainlist <- sort(unique(mergemelt3$Order))
+wider_a4long_locs[is.na(wider_a4long_locs)] <- 0
+
+scatterpie_plot30<-ggplot(data = world) + geom_sf(lwd = 0) + theme_void() + geom_scatterpie(data=wider_a4long_locs, aes(x=Longitude, y=Latitude, group = Station, r=0.05), cols = strainlist, color=NA) + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + xlab("")+ ylab("")  + ggtitle("3.0 fraction")+
+  scale_fill_manual(values  = rep(c(colors30, "green", "red", "grey"), 2)) +
+  coord_sf(xlim = c(-84, -82.2), ylim = c(27, 28), expand = TRUE)+ theme(legend.position = "bottom")  + facet_grid(~Month)
+
+scatterpie_plot30
+```
+
+```{r}
+mergemelt<- psmelt(ps16S_RA_glomO_F)
+
+mergemelt$Order<-str_sub(mergemelt$Order, 5, str_length(mergemelt$Order))
+
+mergemelt<- mergemelt %>% filter(Depth == "Surface") %>% filter(Filter == "0.2") %>%   filter(Abundance>1)
+
+mergemelt$Order[mergemelt$Abundance < 2.1] <- "z< 2% abund."
+
+mergemelt<- mergemelt %>% 
+  filter(!str_detect(Order, "Candidatus")) %>% filter(Order != "") %>% filter(!str_detect(Order, "uncultured")) %>% filter(!str_detect(Order, "ncertae_Sedis")) 
+
+
+mergemelt3 <- mergemelt %>% select(Station, Order, Abundance, Cruise_Name, Latitude, Longitude, Month) %>% group_by(Station, Order, Cruise_Name, Latitude, Longitude, Month) %>%  summarize(abund = sum(Abundance)) %>% ungroup()
+
+wider_a4long_locs<- mergemelt3 %>%  select(Cruise_Name, Station, Order, abund, Latitude, Longitude, Month) %>% pivot_wider( names_from = c("Order"), values_from = c("abund"))
+
+strainlist <- sort(unique(mergemelt3$Order))
+wider_a4long_locs[is.na(wider_a4long_locs)] <- 0
+
+scatterpie_plot02<-ggplot(data = world) + geom_sf(lwd = 0) + theme_void() + geom_scatterpie(data=wider_a4long_locs, aes(x=Longitude, y=Latitude, group = Station, r=0.05), cols = strainlist, color=NA) + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + xlab("")+ ylab("")  + ggtitle("0.2 fraction")+
+  scale_fill_manual(values  = rep(c(colors30, "green", "red", "grey"), 2)) +
+  coord_sf(xlim = c(-84, -82.2), ylim = c(27, 28), expand = TRUE)+ theme(legend.position = "bottom")  + facet_wrap(~Month)
+
+scatterpie_plot02
+```
+# ITS -all
+## feature table and metadata
+```{r}
+psITS<-qza_to_phyloseq(features="CruiseAll_ITSmerged_table99.qza")
+
+metaITS<- read.csv("ITSMetaData.csv", header = TRUE)
+
+metaITS$Station_Type <-  paste(metaITS$Station, metaITS$Sample_Type, sep = "_")
+metaITS$Station_Type_Depth <- paste(metaITS$Station_Type, metaITS$Depth, sep = "_")
+#meta16S$Month <- factor(meta16S$Month, levels = c("October", "November", "December", "February"))
+
+
+row.names(metaITS)<- metaITS$SampleID
+metaITS$Filter <- as.character(metaITS$Filter)
+
+
+METAITS <- sample_data(metaITS)
+```
+
+
+## taxonomy
+
+```{r ITStax-all}
+
+taxonomyITSall <-read.table(file = 'ITSall_taxonomy.tsv', sep = '\t', header = TRUE)
+
+names(taxonomyITSall) <- c("row", "tax", "Confidence") #change the headers (column names)
+row.names(taxonomyITSall) <-taxonomyITSall[[1]] #move the feature ID column to become the row names
+taxonomyITSall <- taxonomyITSall[,(-1)] #delete the feature ID  column 
+taxonomyITSall <-  separate(taxonomyITSall, tax, c("Domain","Phylum", "Class", "Order", "Family", "Genus", "Species", "D7", "D8", "D9", "D10", "D11", "D12", "D13", "D14"), sep = ";", fill = "right")
+taxonomyITSall <- taxonomyITSall[,c(1:7)]
+
+taxmatITSall <- as.matrix(taxonomyITSall)
+TAXITSall = tax_table(taxmatITSall)
+```
+
+##make ps
+
+```{r}
+psITS_all = merge_phyloseq(psITS, TAXITSall, METAITS) 
+psITS_all <- subset_samples(psITS_all, Full_Sample_Name %ni% c("stn_3_12/16/24_UW", "stn_2_12/16/24_UW"))
+
+psITS_RAall<- transform_sample_counts(psITS_all, function(OTU) 100* OTU/sum(OTU))
+```
+
+
+
+Phylum
+```{r}
+psITS_RA_glomP = filter_taxa(psITS_RAall, function(x) sum(x) > 1, TRUE)
+                       
+taxabarplot<-plot_bar(psITS_RA_glomP, x= "Station", fill = "Phylum") +  scale_y_continuous(expand = c(0, 0)) + ggtitle("")  + theme(legend.title=element_blank()) + geom_bar(aes(fill=Phylum), stat="identity", position="stack", width =0.9) +theme_classic() + theme(text = element_text(size=14))+theme(axis.text.x = element_text(angle = 90)) + xlab("Sample") + ylab("Relative Abundance (%)") + theme(text = element_text(size=14)) + scale_fill_manual(values= rep( colors30, 30))+ xlab("")  +facet_grid(Cruise_Name+Depth~Filter, scales = "free_x") 
+
+taxabarplot + theme(legend.position = "bottom")
+```
+
+#### Kingdom 
+```{r}
+psITS_RA_glomDall<- tax_glom(psITS_RAall, 'Domain')
+```
+
+```{r}
+psITS_RA_glomDall = filter_taxa(psITS_RA_glomDall, function(x) sum(x) > 1, TRUE)
+                       
+taxabarplotD<-plot_bar(psITS_RA_glomDall, x= "Station", fill = "Domain") +  scale_y_continuous(expand = c(0, 0)) + 
+  ggtitle("")  + theme(legend.title=element_blank()) + geom_bar(aes(fill=Domain), stat="identity", position="stack", width =0.9) +
+  theme_classic() + theme(text = element_text(size=14))+theme(axis.text.x = element_text(angle = 90)) + xlab("Sample") + 
+  ylab("Relative Abundance (%)") + theme(text = element_text(size=14)) + scale_fill_manual(values= rep( colors30, 30))+ 
+  xlab("")  + facet_grid(Cruise_Name+Depth~Filter, scales = "free_x") 
+
+taxabarplotD + theme(legend.position = "bottom")
+```
+
+
+
+#### Phylum
+```{r}
+
+psITS_RA_glomPall<- tax_glom(psITS_RAall, 'Phylum')
+psITS_RA_glomPall <- subset_taxa(psITS_RA_glomPall, Domain == "k__Fungi")
+```
+
+
+Phylum
+```{r}
+psITS_RA_glomPall = filter_taxa(psITS_RA_glomPall, function(x) sum(x) > 1, TRUE)
+                       
+taxabarplot1<-plot_bar(psITS_RA_glomPall, x= "Station", fill = "Phylum") +  scale_y_continuous(expand = c(0, 0)) + 
+  ggtitle("")  + theme(legend.title=element_blank()) + geom_bar(aes(fill=Phylum), stat="identity", position="stack", width =0.9) +
+  theme_classic() + theme(text = element_text(size=14))+theme(axis.text.x = element_text(angle = 90)) + xlab("Sample") + 
+  ylab("Relative Abundance (%)") + theme(text = element_text(size=14)) + scale_fill_manual(values= rep( colors30, 30))+ 
+  xlab("")  + facet_grid(Cruise_Name+Depth~Filter, scales = "free_x") 
+
+taxabarplot1 + theme(legend.position = "bottom")
+```

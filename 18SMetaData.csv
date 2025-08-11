@@ -1,0 +1,169 @@
+SampleID,Sample_num,Full_Sample_Name,Cruise_Name,Station,Sample_Type,Depth,Filter,Month 
+6689_1_18S,1,HAB 24-01 CTD BOT 0.2,HAB24,1,CTD,Bottom,0.2,October
+6689_2_18S,2,HAB24 UW3 3.0,HAB24,14,UW,Surface,3,October
+6689_3_18S,3,HAB24-01 CTD SURF 0.2,HAB24,1,CTD,Surface,0.2,October
+6689_4_18S,4,HAB 24 UW3 0.2,HAB24,14,UW,Surface,0.2,October
+6689_5_18S,5,24-02 CTD BOT 0.2,HAB24,2,CTD,Bottom,0.2,October
+6689_6_18S,6,24-10 CTD BOT 0.2,HAB24,10,CTD,Bottom,0.2,October
+6689_7_18S,7,25-05 CTD BOT 0.2,HAB24,5,CTD,Bottom,0.2,October
+6689_8_18S,8,24-04 CTD BOT 0.2,HAB24,4,CTD,Bottom,0.2,October
+6689_9_18S,9,24-08 CTD BOT 0.2,HAB24,8,CTD,Bottom,0.2,October
+6689_10_18S,10,24-07 CTD BOT 0.2,HAB24,7,CTD,Bottom,0.2,October
+6689_11_18S,11,24-11 CTD BOT 0.2,HAB24,11,CTD,Bottom,0.2,October
+6689_12_18S,12,24-03 CTD BOT 0.2,HAB24,3,CTD,Bottom,0.2,October
+6689_13_18S,13,24-06 CTD BOT 0.2,HAB24,6,CTD,Bottom,0.2,October
+6689_14_18S,14,24-12 CTD BOT 0.2,HAB24,12,CTD,Bottom,0.2,October
+6689_15_18S,15,24-04 CTD SURF 0.2,HAB24,4,CTD,Surface,0.2,October
+6689_16_18S,16,24-03 CTD SURF 0.2,HAB24,3,CTD,Surface,0.2,October
+6689_17_18S,17,24-02 CTD SURF 0.2,HAB24,2,CTD,Surface,0.2,October
+6689_18_18S,18,24-010 CTD SURF 0.2,HAB24,10,CTD,Surface,0.2,October
+6689_19_18S,19,24-05 CTD SURF 0.2,HAB24,5,CTD,Surface,0.2,October
+6689_20_18S,20,24-11 CTD SURF 0.2,HAB24,11,CTD,Surface,0.2,October
+6689_21_18S,21,24-06 SURF 0.2,HAB24,6,CTD,Surface,0.2,October
+6689_22_18S,22,24-07 SURF 0.2,HAB24,7,CTD,Surface,0.2,October
+6689_23_18S,23,HAB 24-12 CTD SURF 0.2,HAB24,12,CTD,Surface,0.2,October
+6689_24_18S,24,HAB 24-08 CTD SURF 0.2,HAB24,8,CTD,Surface,0.2,October
+6689_25_18S,25,HAB 24 UW 4 0.2,HAB24,15,UW,Surface,0.2,October
+6689_26_18S,26,HAB 24 UW 2 0.2,HAB24,13,UW,Surface,0.2,October
+6689_27_18S,27,HAB 24 UW 4 3.0,HAB24,15,UW,Surface,3,October
+6689_28_18S,28,HAB 24-07 CTD SURF 3.0,HAB24,7,CTD,Surface,3,October
+6689_29_18S,29,HAB 24-11 CTD BOT 3.0,HAB24,11,CTD,Bottom,3,October
+6689_30_18S,30,HAB 24-07 CTD BOT 3.0,HAB24,7,CTD,Bottom,3,October
+6689_31_18S,31,HAB 24-01 CTD BOT 3.0,HAB24,1,CTD,Bottom,3,October
+6689_32_18S,32,HAB 24-04 CTD SURF 3.0,HAB24,4,CTD,Surface,3,October
+6689_33_18S,33,HAB 24-05 CTD SURF 3.0,HAB24,5,CTD,Surface,3,October
+6689_34_18S,34,HAB 24-04 CTD BOT 3.0,HAB24,4,CTD,Bottom,3,October
+6689_35_18S,35,HAB 24-05 CTD BOT 3.0,HAB24,5,CTD,Bottom,3,October
+6689_36_18S,36,HAB 24-06 CTD SURF 3.0,HAB24,6,CTD,Surface,3,October
+6689_37_18S,37,HAB 24-06 CTD BOT 3.0,HAB24,6,CTD,Bottom,3,October
+6689_38_18S,38,HAB 24-08 CTD BOT 3.0,HAB24,8,CTD,Bottom,3,October
+6689_39_18S,39,HAB 24 UW 2 3.0,HAB24,13,UW,Surface,3,October
+6689_40_18S,40,HAB 24-010 CTD SURF 3.0,HAB24,10,CTD,Surface,3,October
+6689_41_18S,41,HAB 24-11 CTD SURF 3.0,HAB24,11,CTD,Surface,3,October
+6689_42_18S,42,HAB 24-12 CTD BOT 3.0,HAB24,12,CTD,Bottom,3,October
+6689_43_18S,43,HAB 24-018 CTD BOT 3.0,HAB24,10,CTD,Bottom,3,October
+6689_44_18S,44,HAB-24-2 CTD BOT 3.0,HAB24,2,CTD,Bottom,3,October
+6689_45_18S,45,HAB 24-2 CTD SURF 3.0,HAB24,2,CTD,Surface,3,October
+6689_46_18S,46,HAB 24-03 CTD  SURF 3.0,HAB24,3,CTD,Surface,3,October
+6689_47_18S,47,HAB 24-03 CTD BOT 3.0,HAB24,3,CTD,Bottom,3,October
+6689_48_18S,48,HAB 24-12 CTD SURF 3.0,HAB24,12,CTD,Surface,3,October
+6689_49_18S,49,HAB 24-08 CTD SURF 3.0,HAB24,8,CTD,Surface,3,October
+6689_50_18S,50,HAB 24-01 CTD SURF 3.0,HAB24,1,CTD,Surface,3,October
+6725_1_18s,1,Shelf_HAB_3_12/17/24_CTD_BOT,SHELF_HAB,3,CTD,Bottom,0.2,December
+6725_2_18s,2,shelf_HAB_3_12/17/24_CTD_Surf,SHELF_HAB,3,CTD,Surface,3,December
+6725_3_18s,3,shelf_HAB_8_12/17/24_CTD Surf,SHELF_HAB,8,CTD,Surface,3,December
+6725_4_18s,4,shelf_HAB_8_12/17/24_CTD BOT,SHELF_HAB,8,CTD,Bottom,0.2,December
+6725_5_18s,5,shelf_HAB_7_12/17/24_CTD_BOT,SHELF_HAB,7,CTD,Bottom,3,December
+6725_6_18s,6,shelf_HAB_7_12/17/24_CTD_Surf,SHELF_HAB,7,CTD,Surface,0.2,December
+6725_7_18s,7,stn_3_12/16/24_UW,SHELF_HAB,13,UW,Surface,0.2,December
+6725_8_18s,8,stn_2_12/16/24_UW,SHELF_HAB,14,UW,Surface,0.2,December
+6725_9_18s,9,stn_1_12/16/24_UW,SHELF_HAB,15,UW,Surface,3,December
+6725_10_18s,10,shelf_HAB_3_12/17/24_CTD_BOT,SHELF_HAB,3,CTD,Bottom,3,December
+6725_11_18s,11,shelf_HAB_3_12/17/24_CTD_Surf,SHELF_HAB,3,CTD,Surface,0.2,December
+6725_12_18s,12,shelf_HAB_8_12/17/24_CTD_Surf,SHELF_HAB,8,CTD,Surface,0.2,December
+6725_13_18s,13,shelf_HAB_5_12/17/24_CTD_Surf,SHELF_HAB,5,CTD,Surface,0.2,December
+6725_14_18s,14,shelf_HAB_2_12/17/24_CTD_BOT,SHELF_HAB,2,CTD,Bottom,0.2,December
+6725_15_18s,15,shelf_HAB_2_12/17/24_CTD_BOT,SHELF_HAB,2,CTD,Bottom,3,December
+6725_16_18s,16,shelf_HAB_2_12/17/24_CTD_Surf,SHELF_HAB,2,CTD,Surface,0.2,December
+6725_17_18s,17,shelf_HAB_2_12/17/24_CTD_Surf,SHELF_HAB,2,CTD,Surface,3,December
+6725_18_18s,18,shelf_HAB_4_12/17/24_CTD_BOT,SHELF_HAB,4,CTD,Bottom,3,December
+6725_19_18s,19,shelf_HAB_8_12/17/24_CTD_BOT,SHELF_HAB,8,CTD,Bottom,3,December
+6725_20_18s,20,shelf_HAB_7_12/17/24_CTD_BOT,SHELF_HAB,7,CTD,Bottom,0.2,December
+6725_21_18s,21,shelf_HAB_7_12/17/24_CTD_Surf,SHELF_HAB,7,CTD,Surface,3,December
+6725_22_18s,22,stn_3_12/16/24_UW,SHELF_HAB,13,UW,Surface,3,December
+6725_23_18s,23,stn_2_12/16/24_UW,SHELF_HAB,14,UW,Surface,3,December
+6725_24_18s,24,stn_1_12/16/24_UW,SHELF_HAB,15,UW,Surface,0.2,December
+6725_25_18s,25,shelf_HAB_4_12/17/24_CTD_BOT,SHELF_HAB,4,CTD,Bottom,0.2,December
+6725_26_18s,26,shelf_HAB_4_12/17/24_CTD_Surf,SHELF_HAB,4,CTD,Surface,0.2,December
+6725_27_18s,27,shelf_HAB_4_12/17/24_CTD_Surf,SHELF_HAB,4,CTD,Surface,3,December
+6725_28_18s,28,shelf_HAB_5_12/17/24_CTD_Surf,SHELF_HAB,5,CTD,Surface,3,December
+6725_29_18s,29,shelf_HAB_5_12/17/24_CTD_BOT,SHELF_HAB,5,CTD,Bottom,0.2,December
+6725_30_18s,30,shelf_HAB_5_12/17/24_CTD_BOT,SHELF_HAB,5,CTD,Bottom,3,December
+6725_31_18s,31,shelf_HAB_6_12/17/24_CTD_Surf,SHELF_HAB,6,CTD,Surface,3,December
+6725_32_18s,32,shelf_HAB_6_12/17/24_CTD_Surf,SHELF_HAB,6,CTD,Surface,0.2,December
+6725_33_18s,33,shelf_HAB_10_12/17/24_CTD_Surf,SHELF_HAB,10,CTD,Surface,3,December
+6725_34_18s,34,shelf_HAB_10_12/17/24_CTD_Surf,SHELF_HAB,10,CTD,Surface,0.2,December
+6725_35_18s,35,shelf_HAB_10_12/17/24_CTD_BOT,SHELF_HAB,10,CTD,Bottom,3,December
+6725_36_18s,36,shelf_HAB_10_12/17/24_CTD_BOT,SHELF_HAB,10,CTD,Bottom,0.2,December
+6725_37_18s,37,shelf_HAB_6_12/17/24_CTD_BOT,SHELF_HAB,6,CTD,Bottom,0.2,December
+6725_38_18s,38,shelf_HAB_6_12/17/24_CTD_BOT,SHELF_HAB,6,CTD,Bottom,3,December
+6725_39_18s,39,shelf_HAB_11_12/17/24_CTD_Surf,SHELF_HAB,11,CTD,Surface,0.2,December
+6725_40_18s,40,shelf_HAB_11_12/17/24_CTD_Surf,SHELF_HAB,11,CTD,Surface,3,December
+6725_41_18s,41,shelf_HAB_11_12/17/24_CTD_BOT,SHELF_HAB,11,CTD,Bottom,0.2,December
+6725_42_18s,42,shelf_HAB_11_12/17/24_CTD_BOT,SHELF_HAB,11,CTD,Bottom,3,December
+6725_43_18s,43,shelf_HAB_1_12/17/24_CTD_Surf,SHELF_HAB,1,CTD,Surface,0.2,December
+6725_44_18s,44,shelf_HAB_1_12/17/24_CTD_Surf,SHELF_HAB,1,CTD,Surface,3,December
+6725_45_18s,45,Shelf_HAB_12_12/18/24_CTD_BOT,SHELF_HAB,12,CTD,Bottom,0.2,December
+6725_46_18s,46,Shelf_HAB_12_12/18/24_CTD_Surf,SHELF_HAB,12,CTD,Surface,0.2,December
+6725_47_18s,47,Shelf_HAB_12_12/18/24_CTD_BOT,SHELF_HAB,12,CTD,Bottom,3,December
+6725_48_18s,48,Shelf_HAB_12_12/18/24_CTD_Surf,SHELF_HAB,12,CTD,Surface,3,December
+6725_49_18s,49,Shelf_HAB_13_12/18/24_UW,SHELF_HAB,13,UW,Surface,0.2,December
+6725_50_18s,50,Shelf_HAB_13_12/18/24_UW,SHELF_HAB,13,UW,Surface,3,December
+6725_51_18s,51,Shelf_HAB_14_12/18/24_UW,SHELF_HAB,14,UW,Surface,0.2,December
+6725_52_18s,52,Shelf_HAB_14_12/18/24_UW,SHELF_HAB,14,UW,Surface,3,December
+6725_53_18s,53,Shelf_HAB_1_12/17/24_CTD_BOT,SHELF_HAB,1,CTD,Bottom,0.2,December
+6725_54_18s,54,Shelf_HAB_1_12/17/24_CTD_BOT,SHELF_HAB,1,CTD,Bottom,3,December
+Shelf_14_0_2um_18s_6875_S44,1,Shelf_14_0_2um_18s_6875_S44,Shelf,14,UW,Surface,0.2,November
+Shelf_14_3_0um_18s_6875_S20,2,Shelf_14_3_0um_18s_6875_S20,Shelf,14,UW,Surface,3,November
+Shelf_15_0_2um_18s_6875_S36,3,Shelf_15_0_2um_18s_6875_S36,Shelf,15,UW,Surface,0.2,November
+Shelf_15_3_0um_18s_6875_S12,4,Shelf_15_3_0um_18s_6875_S12,Shelf,15,UW,Surface,3,November
+Shelf_17_0_2um_18s_6875_S28,5,Shelf_17_0_2um_18s_6875_S28,Shelf,17,UW,Surface,0.2,November
+Shelf_17_3_0um_18s_6875_S4,6,Shelf_17_3_0um_18s_6875_S4,Shelf,17,UW,Surface,3,November
+Shelf_2_0_2_18s_6875_S91,7,Shelf_2_0_2_18s_6875_S91,Shelf,2,UW,Surface,0.2,November
+Shelf_2_3_0um_18s_6875_S3,8,Shelf_2_3_0um_18s_6875_S3,Shelf,2,UW,Surface,3,November
+Shelf_34_0_2um_18s_6875_S52,9,Shelf_34_0_2um_18s_6875_S52,Shelf,34,UW,Surface,0.2,November
+Shelf_34_3_0um_18s_6875_S76,10,Shelf_34_3_0um_18s_6875_S76,Shelf,34,UW,Surface,3,November
+Shelf_35_0_2um_18s_6875_S60,11,Shelf_35_0_2um_18s_6875_S60,Shelf,35,UW,Surface,0.2,November
+Shelf_35_3_0um_18s_6875_S84,12,Shelf_35_3_0um_18s_6875_S84,Shelf,35,UW,Surface,3,November
+Shelf_36_0_2um_18s_6875_S68,13,Shelf_36_0_2um_18s_6875_S68,Shelf,36,UW,Surface,0.2,November
+Shelf_36_3_0_18s_6875_S92,14,Shelf_36_3_0_18s_6875_S92,Shelf,36,UW,Surface,3,November
+Shelf_3_0_2um_18s_6875_S83,15,Shelf_3_0_2um_18s_6875_S83,Shelf,3,UW,Surface,0.2,November
+Shelf_3_3_0um_18s_6875_S11,16,Shelf_3_3_0um_18s_6875_S11,Shelf,3,UW,Surface,3,November
+Shelf_4_0_2um_18s_6875_S75,17,Shelf_4_0_2um_18s_6875_S75,Shelf,4,UW,Surface,0.2,November
+Shelf_4_3_0um_18s_6875_S19,18,Shelf_4_3_0um_18s_6875_S19,Shelf,4,UW,Surface,3,November
+Shelf_5_0_2um_18s_6875_S67,19,Shelf_5_0_2um_18s_6875_S67,Shelf,5,UW,Surface,0.2,November
+Shelf_5_3_0um_18s_6875_S27,20,Shelf_5_3_0um_18s_6875_S27,Shelf,5,UW,Surface,3,November
+Shelf_6_0_2um_18s_6875_S59,21,Shelf_6_0_2um_18s_6875_S59,Shelf,6,UW,Surface,0.2,November
+Shelf_6_3_0um_18s_6875_S35,22,Shelf_6_3_0um_18s_6875_S35,Shelf,6,UW,Surface,3,November
+Shelf_7_0_2um_18s_6875_S51,23,Shelf_7_0_2um_18s_6875_S51,Shelf,7,UW,Surface,0.2,November
+Shelf_7_3_0um_18s_6875_S43,24,Shelf_7_3_0um_18s_6875_S43,Shelf,7,UW,Surface,3,November
+cruise_4_11_BOT_0_2_18s_6875,25,cruise_4_11_BOT_0_2_18s_6875_S123,HAB25,11,CTD,Bottom,0.2,February
+cruise_4_11_BOT_3_0_18s_6875,26,cruise_4_11_BOT_3_0_18s_6875_S131,HAB25,11,CTD,Bottom,3,February
+cruise_4_11_Surf_3_0_18s_6875,27,cruise_4_11_Surf_3_0_18s_6875_S139,HAB25,11,CTD,Surface,3,February
+cruise_4_11_surf_0_2_18s_6875,28,cruise_4_11_surf_0_2_18s_6875_S147,HAB25,11,CTD,Surface,0.2,February
+cruise_4_12_BOT_0_2_18s_6875,29,cruise_4_12_BOT_0_2_18s_6875_S144,HAB25,12,CTD,Bottom,0.2,February
+cruise_4_12_BOT_3_0_18s_6875,30,cruise_4_12_BOT_3_0_18s_6875_S155,HAB25,12,CTD,Bottom,3,February
+cruise_4_12_surf_0_2_18s_6875,31,cruise_4_12_surf_0_2_18s_6875_S163,HAB25,12,CTD,Surface,0.2,February
+cruise_4_12_surf_3_0_18s_6875,32,cruise_4_12_surf_3_0_18s_6875_S115,HAB25,12,CTD,Surface,3,February
+cruise_4_13_UW_0_2_18s_6875,33,cruise_4_13_UW_0_2_18s_6875_S170,HAB25,13,UW,Surface,0.2,February
+cruise_4_13_UW_3_0_18s_6875,34,cruise_4_13_UW_3_0_18s_6875_S178,HAB25,13,UW,Surface,3,February
+cruise_4_14_UW_0_2_18s_6875,35,cruise_4_14_UW_0_2_18s_6875_S154,HAB25,14,UW,Surface,0.2,February
+cruise_4_14_UW_3_0_18s_6875,36,cruise_4_14_UW_3_0_18s_6875_S162,HAB25,14,UW,Surface,3,February
+cruise_4_15_UW_0_2_18s_6875,37,cruise_4_15_UW_0_2_18s_6875_S138,HAB25,15,UW,Surface,0.2,February
+cruise_4_15_UW_3_0_18s_6875,38,cruise_4_15_UW_3_0_18s_6875_S146,HAB25,15,UW,Surface,3,February
+cruise_4_6_BOT_0_2_18s_6875,39,cruise_4_6_BOT_0_2_18s_6875_S152,HAB25,6,CTD,Bottom,0.2,February
+cruise_4_6_BOT_3_0_18s_6875,40,cruise_4_6_BOT_3_0_18s_6875_S100,HAB25,6,CTD,Bottom,3,February
+cruise_4_6_surf_0_2_18s_6875,41,cruise_4_6_surf_0_2_18s_6875_S108,HAB25,6,CTD,Surface,0.2,February
+cruise_4_6_surf_3_0_18s_6875,42,cruise_4_6_surf_3_0_18s_6875_S116,HAB25,6,CTD,Surface,3,February
+cruise_4_T1_1_BOT_3_0_18s_6875,43,cruise_4_T1_1_BOT_3_0_18s_6875_S124,HAB25,T1_1,CTD,Bottom,3,February
+cruise_4_T1_1_Surf_3_0_18s_6875,44,cruise_4_T1_1_Surf_3_0_18s_6875_S156,HAB25,T1_1,CTD,Surface,3,February
+cruise_4_T1_1_surf_0_2_18s_6875,45,cruise_4_T1_1_surf_0_2_18s_6875_S132,HAB25,T1_1,CTD,Surface,0.2,February
+cruise_4_T1_2_BOT_0_2_18s_6875,46,cruise_4_T1_2_BOT_0_2_18s_6875_S107,HAB25,T1_2,CTD,Bottom,0.2,February
+cruise_4_T1_2_BOT_3_0_18s_6875,47,cruise_4_T1_2_BOT_3_0_18s_6875_S99,HAB25,T1_2,CTD,Bottom,3,February
+cruise_4_T1_2_Surf_3_0_18s_6875,48,cruise_4_T1_2_Surf_3_0_18s_6875_S172,HAB25,T1_2,CTD,Surface,3,February
+cruise_4_T1_2_surf_0_2_18s_6875,49,cruise_4_T1_2_surf_0_2_18s_6875_S164,HAB25,T1_2,CTD,Surface,0.2,February
+cruise_4_T1_3_BOT_0_2_18s_6875,50,cruise_4_T1_3_BOT_0_2_18s_6875_S140,HAB25,T1_3,CTD,Bottom,0.2,February
+cruise_4_T1_3_BOT_3_0_18s_6875,51,cruise_4_T1_3_BOT_3_0_18s_6875_S171,HAB25,T1_3,CTD,Bottom,3,February
+cruise_4_T1_3_surf_0_2_18s_6875,52,cruise_4_T1_3_surf_0_2_18s_6875_S148,HAB25,T1_3,CTD,Surface,0.2,February
+cruise_4_T1_3_surf_3_0_18s_6875,53,cruise_4_T1_3_surf_3_0_18s_6875_S179,HAB25,T1_3,CTD,Surface,3,February
+cruise_4_T1_4_BOT_0_2_18s_6875,54,cruise_4_T1_4_BOT_0_2_18s_6875_S109,HAB25,T1_4,CTD,Bottom,0.2,February
+cruise_4_T1_4_BOT_3_0_18s_6875,55,cruise_4_T1_4_BOT_3_0_18s_6875_S101,HAB25,T1_4,CTD,Bottom,3,February
+cruise_4_T1_4_surf_0_2_18s_6875,56,cruise_4_T1_4_surf_0_2_18s_6875_S160,HAB25,T1_4,CTD,Surface,0.2,February
+cruise_4_T1_4_surf_3_0_18s_6875,57,cruise_4_T1_4_surf_3_0_18s_6875_S180,HAB25,T1_4,CTD,Surface,3,February
+cruise_4_T1_5_BOT_0_2_18s_6875,58,cruise_4_T1_5_BOT_0_2_18s_6875_S133,HAB25,T1_5,CTD,Bottom,0.2,February
+cruise_4_T1_5_BOT_3_0_18s_6875,59,cruise_4_T1_5_BOT_3_0_18s_6875_S125,HAB25,T1_5,CTD,Bottom,3,February
+cruise_4_T1_5_surf_0_2_18s_6875,60,cruise_4_T1_5_surf_0_2_18s_6875_S141,HAB25,T1_5,CTD,Surface,0.2,February
+cruise_4_T1_5_surf_3_0_18s_6875,61,cruise_4_T1_5_surf_3_0_18s_6875_S117,HAB25,T1_5,CTD,Surface,3,February
+cruise_4_T1_6_BOT_3_0_18s_6875,62,cruise_4_T1_6_BOT_3_0_18s_6875_S149,HAB25,T1_6,CTD,Bottom,3,February
+cruise_4_T1_6_surf_0_2_18s_6875,63,cruise_4_T1_6_surf_0_2_18s_6875_S157,HAB25,T1_6,CTD,Surface,0.2,February
+cruise_4_T1_6_surf_3_0_18s_6875,64,cruise_4_T1_6_surf_3_0_18s_6875_S165,HAB25,T1_6,CTD,Surface,3,February
